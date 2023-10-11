@@ -1,0 +1,4 @@
+
+db.createCollection( 'Uelleres', {validator: {$jsonSchema: {bsonType: 'object',title:'Uelleres',required: [         'id_ulleres',          'marca',          'graduacio',          'tipus_montura',          'color_montura',          'preu',          'proveidor'],properties: {id_ulleres: {bsonType: 'int'},marca: {bsonType: 'string'},graduacio: {bsonType: 'object',
+title:'object',required: [         'Ull_dret',          'Ull_esquerre'],properties: {Ull_dret: {bsonType: 'decimal'},Ull_esquerre: {bsonType: 'decimal'}}},tipus_montura: {enum: flotant, metalica, pasta},color_montura: {bsonType: 'object',
+title:'object',required: [         'Color_esquerre',          'Color_dret'],properties: {Color_esquerre: {bsonType: 'string'},Color_dret: {bsonType: 'string'}}},preu: {bsonType: 'int'},proveidor: {bsonType: 'int'}}         }      }});  
