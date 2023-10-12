@@ -1,0 +1,2 @@
+
+db.createCollection( 'Empleats', {validator: {$jsonSchema: {bsonType: 'object',title:'Empleats',required: [         'id_empleat',          'nom',          'cognom',          'nif',          'telefon',          'tipus',          'Comanda'],properties: {id_empleat: {bsonType: 'objectId'},nom: {bsonType: 'string'},cognom: {bsonType: 'string'},nif: {bsonType: 'string'},telefon: {bsonType: 'int'},tipus: {enum: },Comanda: {bsonType: 'objectId'}}         }      }});  
