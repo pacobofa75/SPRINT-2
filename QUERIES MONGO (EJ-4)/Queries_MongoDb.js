@@ -1,0 +1,20 @@
+db.Restaurante.find({})
+db.Restaurante.find({}, { restaurant_id: 1, name: 1, borough: 1, cuisine: 1 })
+db.Restaurante.find({}, { _id: 0, restaurant_id: 1, name: 1, borough: 1, cuisine: 1 })
+db.Restaurante.find({}, { _id: 0, restaurant_id: 1, name: 1, borough: 1, "address.zipcode": 1 })
+db.Restaurante.find({ borough: "Bronx" })
+db.Restaurante.find({ borough: "Bronx" }).limit(5)
+db.Restaurante.find({ borough: "Bronx" }).skip(5).limit(5)
+db.restaurant.find({ "grades": { $elemMatch: { "score": { $gt: 80, $lt: 100 } } } });
+db.Restaurante.find({ "grades.score": { $gt: 80, $lt: 100 } })
+db.restaurant.find({ "address.coord.0": { $lt: -95.754168 } })
+db.restaurant.find({ $and: [{ "cuisine": { $ne: "American " } }, { "grades.score": { $gt: 70 } }, { "address.coord.1": { $lt: -65.754168 } }] })
+db.Restaurante.find({ cuisine: { $ne: "American " },"grades.score": { $gt: 70 }, "address.coord.0": { $lt: -65.754168 }})
+db.Restaurante.find({cuisine: { $ne: "American " },"grades.grade": "A",borough: { $ne: "Brooklyn" }}).sort({ cuisine: -1 })
+db.Restaurante.find({ name: { $regex: /^Wil/i } }, { restaurant_id: 1, name: 1, borough: 1, cuisine: 1 })
+db.Restaurante.find({ name: { $regex: /ces$/i } }, { restaurant_id: 1, name: 1, borough: 1, cuisine: 1 })
+db.Restaurante.find({ name: { $regex: /Reg/i } }, { restaurant_id: 1, name: 1, borough: 1, cuisine: 1 })
+db.Restaurante.find({borough: "Bronx",$or: [{ cuisine: "American " }, { cuisine: "Chinese" }]})  
+db.restaurant.find({ "borough": { $in: ["Staten Island", "Queens", "Bronx", "Brooklyn"] } }, { "restaurant_id": 1, "name": 1, "borough": 1, "cuisine": 1, _id: 0 })
+db.restaurant.find({ "borough": { $nin: ["Staten Island", "Queens", "Bronx", "Brooklyn"] } }, { "_id": 0, "restaurant_id": 1, "name": 1, "borough": 1, "cuisine": 1 });
+db.restaurant.find({ "grades.score": { $lt: 10 } }, { "_id": 0, "restaurant_id": 1, "name": 1, "borough": 1, "cuisine": 1 });
