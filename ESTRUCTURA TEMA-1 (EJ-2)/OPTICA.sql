@@ -29,6 +29,23 @@ ENGINE = InnoDB;
 
 
 -- -----------------------------------------------------
+-- Table `OPTICA_CUL_DAMPOLLA`.`Marca`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `OPTICA_CUL_DAMPOLLA`.`Marca` (
+  `id_marca` INT NOT NULL AUTO_INCREMENT,
+  `nombre` VARCHAR(45) NOT NULL,
+  `id_Proveedor` INT NOT NULL,
+  PRIMARY KEY (`id_marca`),
+  INDEX `fk_Marca_Proveedores1_idx` (`id_Proveedor` ASC) VISIBLE,
+  CONSTRAINT `fk_Marca_Proveedores1`
+    FOREIGN KEY (`id_Proveedor`)
+    REFERENCES `OPTICA_CUL_DAMPOLLA`.`Proveedores` (`id_Proveedor`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION)
+ENGINE = InnoDB;
+
+
+-- -----------------------------------------------------
 -- Table `OPTICA_CUL_DAMPOLLA`.`Gafas`
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `OPTICA_CUL_DAMPOLLA`.`Gafas` (
@@ -40,12 +57,12 @@ CREATE TABLE IF NOT EXISTS `OPTICA_CUL_DAMPOLLA`.`Gafas` (
   `color_motura` VARCHAR(45) NULL,
   `color_cristales` VARCHAR(45) NULL,
   `precio` DECIMAL(2) NULL,
-  `Proveedores_id_Proveedor` INT NOT NULL,
-  PRIMARY KEY (`id_gafas`, `Proveedores_id_Proveedor`),
-  INDEX `fk_Gafas_Proveedores_idx` (`Proveedores_id_Proveedor` ASC) VISIBLE,
-  CONSTRAINT `fk_Gafas_Proveedores`
-    FOREIGN KEY (`Proveedores_id_Proveedor`)
-    REFERENCES `OPTICA_CUL_DAMPOLLA`.`Proveedores` (`id_Proveedor`)
+  PRIMARY KEY (`id_gafas`),
+  INDEX `id_marca` () VISIBLE,
+  INDEX `id_marca_idx` (`id_marca` ASC) VISIBLE,
+  CONSTRAINT `id_marca`
+    FOREIGN KEY (`id_marca`)
+    REFERENCES `OPTICA_CUL_DAMPOLLA`.`Marca` (`id_marca`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;
@@ -56,14 +73,20 @@ ENGINE = InnoDB;
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `OPTICA_CUL_DAMPOLLA`.`Clientes` (
   `id_cliente` INT NOT NULL AUTO_INCREMENT,
-  `nombre` VARCHAR(45) NULL,
-  `apellido1` VARCHAR(45) NULL,
-  `direccion` VARCHAR(45) NULL,
-  `telefono` INT NULL,
-  `email` VARCHAR(45) NULL,
-  `fecha_registro` DATE NULL,
-  `recomendado_Por` INT NOT NULL,
-  PRIMARY KEY (`id_cliente`, `recomendado_Por`))
+  `nombre` VARCHAR(45) NOT NULL,
+  `apellido1` VARCHAR(45) NOT NULL,
+  `direccion` VARCHAR(45) NOT NULL,
+  `telefono` INT NOT NULL,
+  `email` VARCHAR(45) NOT NULL,
+  `fecha_registro` DATE NOT NULL,
+  `Cliente _recomendado` INT NOT NULL,
+  PRIMARY KEY (`id_cliente`),
+  INDEX `Cliente_recomendado` (`Cliente _recomendado` ASC) INVISIBLE,
+  CONSTRAINT `Cliente_recomendado`
+    FOREIGN KEY (`id_cliente`)
+    REFERENCES `OPTICA_CUL_DAMPOLLA`.`Clientes` (`Cliente _recomendado`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION)
 ENGINE = InnoDB;
 
 
@@ -83,30 +106,26 @@ ENGINE = InnoDB;
 CREATE TABLE IF NOT EXISTS `OPTICA_CUL_DAMPOLLA`.`Ventas` (
   `id_ventas` INT NOT NULL AUTO_INCREMENT,
   `fecha_venta` DATE NULL,
-  `id_gafas` INT NULL,
-  `id_empleado` INT NULL,
-  `Empleados_id_empleado` INT NOT NULL,
-  `Clientes_id_cliente` INT NOT NULL,
-  `Clientes_recomendado_Por` INT NOT NULL,
-  `Gafas_id_gafas` INT NOT NULL,
-  `Gafas_Proveedores_id_Proveedor` INT NOT NULL,
-  PRIMARY KEY (`id_ventas`, `Clientes_id_cliente`, `Clientes_recomendado_Por`),
-  INDEX `fk_Ventas_Empleados1_idx` (`Empleados_id_empleado` ASC) VISIBLE,
-  INDEX `fk_Ventas_Clientes1_idx` (`Clientes_id_cliente` ASC, `Clientes_recomendado_Por` ASC) VISIBLE,
-  INDEX `fk_Ventas_Gafas1_idx` (`Gafas_id_gafas` ASC, `Gafas_Proveedores_id_Proveedor` ASC) VISIBLE,
+  `id_empleado` INT NOT NULL,
+  `id_cliente` INT NOT NULL,
+  `id_gafas` INT NOT NULL,
+  PRIMARY KEY (`id_ventas`, `id_cliente`),
+  INDEX `fk_Ventas_Empleados1_idx` (`id_empleado` ASC) VISIBLE,
+  INDEX `fk_Ventas_Clientes1_idx` (`id_cliente` ASC) VISIBLE,
+  INDEX `fk_Ventas_Gafas1_idx` (`id_gafas` ASC) VISIBLE,
   CONSTRAINT `fk_Ventas_Empleados1`
-    FOREIGN KEY (`Empleados_id_empleado`)
+    FOREIGN KEY (`id_empleado`)
     REFERENCES `OPTICA_CUL_DAMPOLLA`.`Empleados` (`id_empleado`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION,
   CONSTRAINT `fk_Ventas_Clientes1`
-    FOREIGN KEY (`Clientes_id_cliente` , `Clientes_recomendado_Por`)
-    REFERENCES `OPTICA_CUL_DAMPOLLA`.`Clientes` (`id_cliente` , `recomendado_Por`)
+    FOREIGN KEY (`id_cliente`)
+    REFERENCES `OPTICA_CUL_DAMPOLLA`.`Clientes` (`id_cliente`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION,
   CONSTRAINT `fk_Ventas_Gafas1`
-    FOREIGN KEY (`Gafas_id_gafas` , `Gafas_Proveedores_id_Proveedor`)
-    REFERENCES `OPTICA_CUL_DAMPOLLA`.`Gafas` (`id_gafas` , `Proveedores_id_Proveedor`)
+    FOREIGN KEY (`id_gafas`)
+    REFERENCES `OPTICA_CUL_DAMPOLLA`.`Gafas` (`id_gafas`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;
